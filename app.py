@@ -32,8 +32,8 @@ class App():
         self.number2.pack(side=tk.LEFT)
 
 
-        self.answer = tk.StringVar()
-        self.answer_entry = ttk.Entry(content, textvariable=self.answer,font=("Arial", 35), width=5, justify='center')
+        self.user_answer = tk.StringVar()
+        self.answer_entry = ttk.Entry(content, textvariable=self.user_answer,font=("Arial", 35), width=5, justify='center')
         self.answer_entry.pack(side=tk.TOP, pady=15)
         self.answer_entry.bind('<KeyPress>', lambda e: self.check.configure(state=tk.NORMAL)) 
 
@@ -66,10 +66,9 @@ class App():
     
     def check_result(self):
         try: 
-            answer = round(float(self.answer.get()), 1)
+            answer = round(float(self.user_answer.get()), 1)
         except Exception as e:
             answer = None
-            print(e)
         
         match self.operator:
             case '-': result = self.num1 - self.num2
