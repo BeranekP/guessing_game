@@ -8,6 +8,8 @@ class App():
     HEIGHT = 500
 
     def __init__(self):
+        self.operators = ['×', '/', '+', '-']
+
         self.root = tk.Tk()
         self.root.geometry(f'{self.WIDTH}x{self.HEIGHT}')
 
@@ -23,8 +25,8 @@ class App():
         self.numberl = ttk.Label(excercise, text='', font=("Arial", 35), width=2, relief="groove", anchor="c")
         self.numberl.pack(side=tk.LEFT)
         
-        operator = ttk.Label(excercise, text='×', font=("Arial", 35), width=1)
-        operator.pack(side=tk.LEFT)
+        self.operator_box = ttk.Label(excercise, text='', font=("Arial", 35), width=1)
+        self.operator_box.pack(side=tk.LEFT)
 
         self.number2 =ttk.Label(excercise, text='', font=("Arial", 35), width=2, relief="groove", anchor="c")    
         self.number2.pack(side=tk.LEFT)
@@ -51,6 +53,8 @@ class App():
         sys.exit(0)
 
     def generate_numbers(self):
+        self.operator = random.choice(self.operators)
+        self.operator_box["text"] = self.operator
         self.response["text"]=''
         self.answer_entry["state"]=tk.NORMAL
         self.answer_entry.delete(0, 'end')
@@ -62,22 +66,29 @@ class App():
     
     def check_result(self):
         try: 
-            answer = int(self.answer.get())
-        except Exception:
-            asnwer = None
+            answer = round(float(self.answer.get()), 1)
+        except Exception as e:
+            answer = None
+            print(e)
+        
+        match self.operator:
+            case '-': result = self.num1 - self.num2
+            case '+': result = self.num1 + self.num2
+            case '/': result = self.num1 / self.num2
+            case '×': result = self.num1 * self.num2
 
-        if answer == self.num1 * self.num2:
-           self.generate['state'] = tk.NORMAL
-           self.check["state"]=tk.DISABLED
-           self.answer_entry["state"]=tk.DISABLED
-           self.response["text"] = "Správně :)" 
-           self.response["fg"] = "green" 
+        if answer == round(result, 1):
+            self.generate['state'] = tk.NORMAL
+            self.check["state"]=tk.DISABLED
+            self.answer_entry["state"]=tk.DISABLED
+            self.response["text"] = "Správně :)" 
+            self.response["fg"] = "green" 
 
         else:
-           self.generate['state'] = tk.DISABLED
-           self.answer_entry.delete(0, 'end')
-           self.response["text"] = "Špatně :("
-           self.response["fg"] = "red" 
+            self.generate['state'] = tk.DISABLED
+            self.answer_entry.delete(0, 'end')
+            self.response["text"] = "Špatně :("
+            self.response["fg"] = "red" 
 
         
 if __name__ == "__main__":
